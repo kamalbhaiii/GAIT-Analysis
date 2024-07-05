@@ -1,4 +1,4 @@
-function Prototype_6()
+function Prototype_5()
 
 % Load data from file
 data = readtable('data.csv');
@@ -28,8 +28,12 @@ startButton = uicontrol('Style', 'pushbutton', 'String', 'Start', ...
     'Position', [20 20 60 30], 'Callback', @startSimulation, 'BackgroundColor', 'g', 'ForegroundColor', 'w', 'FontWeight', 'bold');
 
 % Create conclusion labels for each plot
+conclusionLabel_heartbeat = uicontrol('Style', 'text', 'String', 'Press start button to analyze', ...
+    'Position', [800 370 600 20], 'BackgroundColor', [0.85 0.85 0.85], 'FontSize', 10, 'HorizontalAlignment', 'left');
+conclusionLabel_walking = uicontrol('Style', 'text', 'String', 'Press start button to analyze', ...
+    'Position', [800 2 600 20], 'BackgroundColor', [0.85 0.85 0.85], 'FontSize', 10, 'HorizontalAlignment', 'left');
 conclusionLabel_activity = uicontrol('Style', 'text', 'String', 'Activity will be shown here', ...
-    'Position', [800 2 300 20], 'BackgroundColor', [0.85 0.85 0.85], 'FontSize', 10, 'HorizontalAlignment', 'left');
+    'Position', [200 2 300 20], 'BackgroundColor', [0.85 0.85 0.85], 'FontSize', 10, 'HorizontalAlignment', 'left');
 
 isRunning = false;
 monitoringMode = ''; % Variable to store monitoring mode
@@ -110,12 +114,6 @@ simulationTime = inf; % Variable to store simulation time
         % Classify the current activity based on thresholds
         currentHR = heartRateData(end);
         currentWR = walkingRateData(end);
-        
-        % Alert if heart rate or walking rate exceeds 140
-        if currentHR > 140 || currentWR > 140
-            uiwait(msgbox('Warning: High physiological rates detected. Please seek medical attention if you feel unwell.', 'Alert', 'warn'));
-        end
-        
         if currentHR < 60 && currentWR < 50
             activity = 'Resting';
         elseif currentHR >= 60 && currentHR <= 100 && currentWR >= 50 && currentWR <= 100
@@ -139,7 +137,16 @@ simulationTime = inf; % Variable to store simulation time
             end
         end
         
-        set(conclusionLabel_activity, 'String', sprintf('Activity: %s', activity));
+        fprintf('Activity Detected: %s\n', activity);
+        
+        set(conclusionLabel_heartbeat, 'String', sprintf(...
+            'Heart Rate: Mean=%.2f bpm, Std=%.2f bpm, Range=%.2f - %.2f bpm',...
+            heartRateStats.mean, heartRateStats.std, heartRateStats.min, heartRateStats.max));
+        set(conclusionLabel_walking, 'String', sprintf(...
+            'Walking Rate: Mean=%.2f steps/min, Std=%.2f steps/min, Range=%.2f - %.2f steps/min',...
+            walkingRateStats.mean, walkingRateStats.std, walkingRateStats.min, walkingRateStats.max));
+        set(conclusionLabel_activity, 'String', sprintf(...
+            'Activity: %s', activity));
     end
 
     function stats = computeStats(data)

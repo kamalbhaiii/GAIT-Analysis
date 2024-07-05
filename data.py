@@ -13,12 +13,12 @@ time_points = np.arange(0, total_time, time_step)
 # Heart rate ranges
 resting_hr = 50  # bpm
 walking_hr = 80  # bpm
-running_hr = 140  # bpm
+running_hr = 142  # bpm
 
 # Walking rate ranges
 resting_wr = 0  # steps per minute
 walking_wr = 80  # steps per minute
-running_wr = 160  # steps per minute
+running_wr = 142  # steps per minute
 
 # Transition points
 resting_time = 200
