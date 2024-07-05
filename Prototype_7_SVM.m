@@ -1,7 +1,7 @@
-function Prototype_6()
+function Prototype_7_SVM()
 
 % Load data from file
-data = readtable('data.csv');
+data = readtable('testing_data.csv');
 heartRateData = data.HeartRate;
 walkingRateData = data.WalkingRate;
 
@@ -71,7 +71,7 @@ simulationTime = inf; % Variable to store simulation time
             % Update the plots
             cla(ax_heartbeat);
             plot(ax_heartbeat, heartRateData(1:idx), 'r', 'LineWidth', 2);
-            ylim(ax_heartbeat, [0 200]);
+            ylim(ax_heartbeat, [0 160]);
             grid(ax_heartbeat, 'on'); % Ensure grid remains visible
             ylabel(ax_heartbeat, 'Heart Rate (bpm)');
             title(ax_heartbeat, 'Heart Rate Simulation');
@@ -104,42 +104,23 @@ simulationTime = inf; % Variable to store simulation time
     end
 
     function drawConclusions(heartRateData, walkingRateData)
-        heartRateStats = computeStats(heartRateData);
-        walkingRateStats = computeStats(walkingRateData);
-        
-        % Classify the current activity based on thresholds
+        % Classify activity using the trained SVM model
         currentHR = heartRateData(end);
         currentWR = walkingRateData(end);
         
-        % Alert if heart rate or walking rate exceeds danger thresholds
-        if currentHR > 200 || currentWR > 140
-            uiwait(msgbox('Warning: High physiological rates detected. Please seek medical attention if you feel unwell.', 'Alert', 'warn'));
-        end
+        pyenv('Version','3.9'); % Set the Python version
+        model = py.joblib.load('svm_activity_model.pkl');
         
-        if currentHR < 60 && currentWR < 90
-            activity = 'Sedentary';
-        elseif (currentHR >= 60 && currentHR <= 120) || (currentWR >= 90 && currentWR <= 110)
-            activity = 'Light Walking';
-        elseif (currentHR > 120 && currentHR <= 140) || (currentWR > 110 && currentWR <= 130)
-            activity = 'Brisk Walking';
-        elseif (currentHR > 140 && currentHR <= 160) || (currentWR > 130 && currentWR <= 140)
-            activity = 'Jogging';
-        elseif (currentHR > 160 && currentHR <= 180) || (currentWR > 140 && currentWR <= 160)
-            activity = 'Running';
-        elseif (currentHR > 180 && currentHR <= 200) || currentWR > 160
-            activity = 'High-Intensity Running/Sprinting';
-        else
-            activity = 'Unknown';
-        end
+        pre_data = py.numpy.array([currentHR, currentWR], dtype=py.numpy.int64);
+        data = pre_data.reshape(py.tuple(int64([1,-1])));
         
-        set(conclusionLabel_activity, 'String', sprintf('Activity: %s', activity));
+        % Make the prediction
+        activity = model.predict(data);
+        fprintf('%s', activity);
+        activity = py.list(activity);
+        predictedActivityCell = cell(activity); 
+        predictedActivity = string(predictedActivityCell);
+        
+        set(conclusionLabel_activity, 'String', sprintf('Activity: %s', predictedActivity));
     end
-
-    function stats = computeStats(data)
-        stats.mean = mean(data);
-        stats.std = std(data);
-        stats.min = min(data);
-        stats.max = max(data);
-    end
-
 end

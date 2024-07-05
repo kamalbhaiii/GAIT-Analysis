@@ -13,12 +13,12 @@ time_points = np.arange(0, total_time, time_step)
 # Heart rate ranges
 resting_hr = 50  # bpm
 walking_hr = 80  # bpm
-running_hr = 142  # bpm
+running_hr = 201  # bpm
 
 # Walking rate ranges
 resting_wr = 0  # steps per minute
 walking_wr = 80  # steps per minute
-running_wr = 142  # steps per minute
+running_wr = 201  # steps per minute
 
 # Transition points
 resting_time = 200
@@ -30,16 +30,20 @@ walking_rate = []
 
 for t in time_points:
     if t < resting_time:
-        hr = resting_hr + np.random.normal(0, 1)
-        wr = resting_wr + np.random.normal(0, 1)
+        hr = resting_hr + abs(int(np.random.normal(0, 1)))
+        wr = resting_wr + abs(int(np.random.normal(0, 1)))
     elif t < resting_time + walking_time:
         progress = (t - resting_time) / walking_time
-        hr = resting_hr + (walking_hr - resting_hr) * progress + np.random.normal(0, 2)
-        wr = resting_wr + (walking_wr - resting_wr) * progress + np.random.normal(0, 2)
+        hr = resting_hr + int((walking_hr - resting_hr) * progress + np.random.normal(0, 2))
+        wr = resting_wr + int((walking_wr - resting_wr) * progress + np.random.normal(0, 2))
     else:
         progress = (t - (resting_time + walking_time)) / (total_time - resting_time - walking_time)
-        hr = walking_hr + (running_hr - walking_hr) * progress + np.random.normal(0, 2)
-        wr = walking_wr + (running_wr - walking_wr) * progress + np.random.normal(0, 2)
+        hr = walking_hr + int((running_hr - walking_hr) * progress + np.random.normal(0, 2))
+        wr = walking_wr + int((running_wr - walking_wr) * progress + np.random.normal(0, 2))
+    
+    # Ensure that heart rate and walking rate are not negative
+    hr = max(hr, 0)
+    wr = max(wr, 0)
     
     heart_rate.append(hr)
     walking_rate.append(wr)
@@ -52,7 +56,7 @@ data = {
 df = pd.DataFrame(data)
 
 # Save to CSV
-csv_path = './data.csv'
+csv_path = './testing_data.csv'
 df.to_csv(csv_path, index=False)
 
 csv_path
