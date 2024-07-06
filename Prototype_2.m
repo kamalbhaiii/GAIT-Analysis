@@ -1,40 +1,40 @@
 function simulatePhysiologicalRates()
 
-    screenSize = get(0, 'ScreenSize');
-    
-    % Create figure and subplots
-    fig = figure('Name', 'Physiological Rates Simulation', 'Position', screenSize, 'WindowState', 'maximized', 'Color', [0.94 0.94 0.94]);
-    ax_heartbeat = subplot(3, 1, 1, 'Color', [0.85 0.85 0.85]);
-    ax_breathing = subplot(3, 1, 2, 'Color', [0.85 0.85 0.85]);
-    ax_walking = subplot(3, 1, 3, 'Color', [0.85 0.85 0.85]);
-    
-    % Set properties for heart rate plot
-    title(ax_heartbeat, 'Heart Rate Simulation');
-    ylabel(ax_heartbeat, 'Heart Rate (bpm)');
-    grid(ax_heartbeat, 'on');
-    
-    % Set properties for breathing rate plot
-    title(ax_breathing, 'Breathing Rate Simulation');
-    ylabel(ax_breathing, 'Breathing Rate (breaths/min)');
-    grid(ax_breathing, 'on');
-    
-    % Set properties for walking rate plot
-    title(ax_walking, 'Walking Rate Simulation');
-    xlabel(ax_walking, 'Time (seconds)');
-    ylabel(ax_walking, 'Walking Rate (steps/min)');
-    grid(ax_walking, 'on');
-    
-    % Create Start button
-    startButton = uicontrol('Style', 'pushbutton', 'String', 'Start', ...
-        'Position', [20 20 60 30], 'Callback', @startSimulation, 'BackgroundColor', 'g', 'ForegroundColor', 'w', 'FontWeight', 'bold');
-    
-    % Create conclusion label
-    conclusionLabel = uicontrol('Style', 'text', 'String', '', ...
-        'Position', [480 10 600 50], 'BackgroundColor', [0.94 0.94 0.94], 'FontSize', 8);
-    
-    isRunning = false; 
-    monitoringMode = ''; % Variable to store monitoring mode
-    simulationTime = inf; % Variable to store simulation time
+screenSize = get(0, 'ScreenSize');
+
+% Create figure and subplots
+fig = figure('Name', 'GAIT Analysis Simulation', 'Position', screenSize, 'WindowState', 'maximized', 'Color', [0.94 0.94 0.94]);
+ax_heartbeat = subplot(3, 1, 1, 'Color', [0.85 0.85 0.85]);
+ax_breathing = subplot(3, 1, 2, 'Color', [0.85 0.85 0.85]);
+ax_walking = subplot(3, 1, 3, 'Color', [0.85 0.85 0.85]);
+
+% Set properties for heart rate plot
+title(ax_heartbeat, 'Heart Rate Simulation');
+ylabel(ax_heartbeat, 'Heart Rate (bpm)');
+grid(ax_heartbeat, 'on');
+
+% Set properties for breathing rate plot
+title(ax_breathing, 'Breathing Rate Simulation');
+ylabel(ax_breathing, 'Breathing Rate (breaths/min)');
+grid(ax_breathing, 'on');
+
+% Set properties for walking rate plot
+title(ax_walking, 'Walking Rate Simulation');
+xlabel(ax_walking, 'Time (seconds)');
+ylabel(ax_walking, 'Walking Rate (steps/min)');
+grid(ax_walking, 'on');
+
+% Create Start button
+startButton = uicontrol('Style', 'pushbutton', 'String', 'Start', ...
+    'Position', [20 20 60 30], 'Callback', @startSimulation, 'BackgroundColor', 'g', 'ForegroundColor', 'w', 'FontWeight', 'bold');
+
+% Create conclusion label
+conclusionLabel = uicontrol('Style', 'text', 'String', '', ...
+    'Position', [480 10 600 50], 'BackgroundColor', [0.94 0.94 0.94], 'FontSize', 8);
+
+isRunning = false;
+monitoringMode = ''; % Variable to store monitoring mode
+simulationTime = inf; % Variable to store simulation time
 
     function startSimulation(~, ~)
         % Ask for monitoring mode
@@ -60,7 +60,7 @@ function simulatePhysiologicalRates()
         end
         
         isRunning = true;
-        startTime = tic; 
+        startTime = tic;
         heartRateData = [];
         breathingRateData = [];
         walkingRateData = [];
@@ -104,12 +104,12 @@ function simulatePhysiologicalRates()
         isRunning = false;
         drawConclusions(heartRateData, breathingRateData, walkingRateData);
     end
-    
+
     function drawConclusions(heartRateData, breathingRateData, walkingRateData)
         heartRateStats = computeStats(heartRateData);
         breathingRateStats = computeStats(breathingRateData);
         walkingRateStats = computeStats(walkingRateData);
-
+        
         set(conclusionLabel, 'String', sprintf(...
             'Heart Rate: Mean=%.2f bpm, Std=%.2f bpm, Range=%.2f - %.2f bpm\nBreathing Rate: Mean=%.2f breaths/min, Std=%.2f breaths/min, Range=%.2f - %.2f breaths/min\nWalking Rate: Mean=%.2f steps/min, Std=%.2f steps/min, Range=%.2f - %.2f steps/min',...
             heartRateStats.mean, heartRateStats.std, heartRateStats.min, heartRateStats.max,...

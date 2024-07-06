@@ -1,14 +1,14 @@
 function Prototype_7_SVM()
 
 % Load data from file
-data = readtable('testing_data.csv');
+data = readtable('./Testing Data/testing_data.csv');
 heartRateData = data.HeartRate;
 walkingRateData = data.WalkingRate;
 
 screenSize = get(0, 'ScreenSize');
 
 % Create figure and subplots
-fig = figure('Name', 'Physiological Rates Simulation', 'Position', screenSize, 'WindowState', 'maximized', 'Color', [0.94 0.94 0.94]);
+fig = figure('Name', 'GAIT Analysis Simulation', 'Position', screenSize, 'WindowState', 'maximized', 'Color', [0.94 0.94 0.94]);
 ax_heartbeat = subplot(2, 1, 1, 'Color', [0.85 0.85 0.85]);
 ax_walking = subplot(2, 1, 2, 'Color', [0.85 0.85 0.85]);
 
@@ -107,13 +107,13 @@ simulationTime = inf; % Variable to store simulation time
         % Classify activity using the trained SVM model
         currentHR = heartRateData(end);
         currentWR = walkingRateData(end);
-
+        
         if currentHR > 200 || currentWR > 200
             uiwait(msgbox('Warning: High physiological rates detected. Please seek medical attention if you feel unwell.', 'Alert', 'warn'));
         end
         
         pyenv('Version','3.9'); % Set the Python version
-        model = py.joblib.load('svm_activity_model.pkl');
+        model = py.joblib.load('./Models/svm_activity_model.pkl');
         
         pre_data = py.numpy.array([currentHR, currentWR], dtype=py.numpy.int64);
         data = pre_data.reshape(py.tuple(int64([1,-1])));
@@ -122,7 +122,7 @@ simulationTime = inf; % Variable to store simulation time
         activity = model.predict(data);
         fprintf('%s', activity);
         activity = py.list(activity);
-        predictedActivityCell = cell(activity); 
+        predictedActivityCell = cell(activity);
         predictedActivity = string(predictedActivityCell);
         
         set(conclusionLabel_activity, 'String', sprintf('Activity: %s', predictedActivity));

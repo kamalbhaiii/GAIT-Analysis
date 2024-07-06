@@ -1,34 +1,34 @@
 % Define the main function to simulate heart-beats, breathing, and walking rates
 function simulatePhysiologicalRates()
 
-    % Initialize the figure and axes for plotting
-    fig = figure('Name', 'Physiological Rates Simulation', 'Position', [100, 100, 800, 600]);
-    ax_heartbeat = subplot(3, 1, 1);
-    ax_breathing = subplot(3, 1, 2);
-    ax_walking = subplot(3, 1, 3);
-    
-    title(ax_heartbeat, 'Heart Rate Simulation');
-    title(ax_breathing, 'Breathing Rate Simulation');
-    title(ax_walking, 'Walking Rate Simulation');
-    
-    xlabel(ax_walking, 'Time (seconds)');
-    ylabel(ax_heartbeat, 'Heart Rate (bpm)');
-    ylabel(ax_breathing, 'Breathing Rate (breaths/min)');
-    ylabel(ax_walking, 'Walking Rate (steps/min)');
-    
-    % Initialize start and stop buttons
-    startButton = uicontrol('Style', 'pushbutton', 'String', 'Start',...
-        'Position', [20 20 60 30], 'Callback', @startSimulation);
-    stopButton = uicontrol('Style', 'pushbutton', 'String', 'Stop',...
-        'Position', [100 20 60 30], 'Callback', @stopSimulation);
-    
-    % Initialize text labels for displaying conclusions
-    conclusionLabel = uicontrol('Style', 'text', 'String', '',...
-        'Position', [180 10 600 50]);
-    
-    isRunning = false; % Flag to indicate if simulation is running
+% Initialize the figure and axes for plotting
+fig = figure('Name', 'GAIT Analysis Simulation', 'Position', [100, 100, 800, 600]);
+ax_heartbeat = subplot(3, 1, 1);
+ax_breathing = subplot(3, 1, 2);
+ax_walking = subplot(3, 1, 3);
 
-    % Function to start the simulation
+title(ax_heartbeat, 'Heart Rate Simulation');
+title(ax_breathing, 'Breathing Rate Simulation');
+title(ax_walking, 'Walking Rate Simulation');
+
+xlabel(ax_walking, 'Time (seconds)');
+ylabel(ax_heartbeat, 'Heart Rate (bpm)');
+ylabel(ax_breathing, 'Breathing Rate (breaths/min)');
+ylabel(ax_walking, 'Walking Rate (steps/min)');
+
+% Initialize start and stop buttons
+startButton = uicontrol('Style', 'pushbutton', 'String', 'Start',...
+    'Position', [20 20 60 30], 'Callback', @startSimulation);
+stopButton = uicontrol('Style', 'pushbutton', 'String', 'Stop',...
+    'Position', [100 20 60 30], 'Callback', @stopSimulation);
+
+% Initialize text labels for displaying conclusions
+conclusionLabel = uicontrol('Style', 'text', 'String', '',...
+    'Position', [180 10 600 50]);
+
+isRunning = false; % Flag to indicate if simulation is running
+
+% Function to start the simulation
     function startSimulation(~, ~)
         isRunning = true;
         startTime = tic; % Start timer
@@ -76,12 +76,12 @@ function simulatePhysiologicalRates()
         end
     end
 
-    % Function to stop the simulation
+% Function to stop the simulation
     function stopSimulation(~, ~)
         isRunning = false;
     end
 
-    % Function to compute statistics
+% Function to compute statistics
     function stats = computeStats(data)
         stats.mean = mean(data);
         stats.std = std(data);

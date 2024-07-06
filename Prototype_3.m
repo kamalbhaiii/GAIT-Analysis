@@ -1,46 +1,46 @@
 function simulatePhysiologicalRates()
 
-    screenSize = get(0, 'ScreenSize');
-    
-    % Create figure and subplots
-    fig = figure('Name', 'Physiological Rates Simulation', 'Position', screenSize, 'WindowState', 'maximized', 'Color', [0.94 0.94 0.94]);
-    ax_heartbeat = subplot(3, 1, 1, 'Color', [0.85 0.85 0.85]);
-   
-    ax_breathing = subplot(3, 1, 2, 'Color', [0.85 0.85 0.85]);
-    ax_walking = subplot(3, 1, 3, 'Color', [0.85 0.85 0.85]);
-    
-    % Set properties for heart rate plot
-    title(ax_heartbeat, 'Heart Rate Simulation');
-    ylabel(ax_heartbeat, 'Heart Rate (bpm)');
-    grid(ax_heartbeat, 'on');
-    
-    % Set properties for breathing rate plot
-    %
-     title(ax_breathing, 'Breathing Rate Simulation');
-     ylabel(ax_breathing, 'Breathing Rate (breaths/min)');
-     grid(ax_breathing, 'on');
-    
-    % Set properties for walking rate plot
-    title(ax_walking, 'Walking Rate Simulation');
-    xlabel(ax_walking, 'Time (seconds)');
-    ylabel(ax_walking, 'Walking Rate (steps/min)');
-    grid(ax_walking, 'on');
-    
-    % Create Start button
-    startButton = uicontrol('Style', 'pushbutton', 'String', 'Start', ...
-        'Position', [20 20 60 30], 'Callback', @startSimulation, 'BackgroundColor', 'g', 'ForegroundColor', 'w', 'FontWeight', 'bold');
-    
-    % Create conclusion labels for each plot
-    conclusionLabel_heartbeat = uicontrol('Style', 'text', 'String', 'Press start button to analyze', ...
-        'Position', [800 485 600 20], 'BackgroundColor', [0.85 0.85 0.85], 'FontSize', 10, 'HorizontalAlignment', 'left');
-    conclusionLabel_breathing = uicontrol('Style', 'text', 'String', 'Press start button to analyze', ...
-        'Position', [800 263 600 20], 'BackgroundColor', [0.85 0.85 0.85], 'FontSize', 10, 'HorizontalAlignment', 'left');
-    conclusionLabel_walking = uicontrol('Style', 'text', 'String', 'Press start button to analyze', ...
-        'Position', [800 23 600 20], 'BackgroundColor', [0.85 0.85 0.85], 'FontSize', 10, 'HorizontalAlignment', 'left');
-    
-    isRunning = false; 
-    monitoringMode = ''; % Variable to store monitoring mode
-    simulationTime = inf; % Variable to store simulation time
+screenSize = get(0, 'ScreenSize');
+
+% Create figure and subplots
+fig = figure('Name', 'GAIT Analysis Simulation', 'Position', screenSize, 'WindowState', 'maximized', 'Color', [0.94 0.94 0.94]);
+ax_heartbeat = subplot(3, 1, 1, 'Color', [0.85 0.85 0.85]);
+
+ax_breathing = subplot(3, 1, 2, 'Color', [0.85 0.85 0.85]);
+ax_walking = subplot(3, 1, 3, 'Color', [0.85 0.85 0.85]);
+
+% Set properties for heart rate plot
+title(ax_heartbeat, 'Heart Rate Simulation');
+ylabel(ax_heartbeat, 'Heart Rate (bpm)');
+grid(ax_heartbeat, 'on');
+
+% Set properties for breathing rate plot
+%
+title(ax_breathing, 'Breathing Rate Simulation');
+ylabel(ax_breathing, 'Breathing Rate (breaths/min)');
+grid(ax_breathing, 'on');
+
+% Set properties for walking rate plot
+title(ax_walking, 'Walking Rate Simulation');
+xlabel(ax_walking, 'Time (seconds)');
+ylabel(ax_walking, 'Walking Rate (steps/min)');
+grid(ax_walking, 'on');
+
+% Create Start button
+startButton = uicontrol('Style', 'pushbutton', 'String', 'Start', ...
+    'Position', [20 20 60 30], 'Callback', @startSimulation, 'BackgroundColor', 'g', 'ForegroundColor', 'w', 'FontWeight', 'bold');
+
+% Create conclusion labels for each plot
+conclusionLabel_heartbeat = uicontrol('Style', 'text', 'String', 'Press start button to analyze', ...
+    'Position', [800 485 600 20], 'BackgroundColor', [0.85 0.85 0.85], 'FontSize', 10, 'HorizontalAlignment', 'left');
+conclusionLabel_breathing = uicontrol('Style', 'text', 'String', 'Press start button to analyze', ...
+    'Position', [800 263 600 20], 'BackgroundColor', [0.85 0.85 0.85], 'FontSize', 10, 'HorizontalAlignment', 'left');
+conclusionLabel_walking = uicontrol('Style', 'text', 'String', 'Press start button to analyze', ...
+    'Position', [800 23 600 20], 'BackgroundColor', [0.85 0.85 0.85], 'FontSize', 10, 'HorizontalAlignment', 'left');
+
+isRunning = false;
+monitoringMode = ''; % Variable to store monitoring mode
+simulationTime = inf; % Variable to store simulation time
 
     function startSimulation(~, ~)
         % Ask for monitoring mode
@@ -66,7 +66,7 @@ function simulatePhysiologicalRates()
         end
         
         isRunning = true;
-        startTime = tic; 
+        startTime = tic;
         heartRateData = [];
         breathingRateData = [];
         walkingRateData = [];
@@ -117,16 +117,16 @@ function simulatePhysiologicalRates()
         isRunning = false;
         drawConclusions(heartRateData, breathingRateData, walkingRateData);
     end
-    
+
     function drawConclusions(heartRateData, breathingRateData, walkingRateData)
         heartRateStats = computeStats(heartRateData);
         breathingRateStats = computeStats(breathingRateData);
         walkingRateStats = computeStats(walkingRateData);
-
+        
         fprintf('Heart Rate: Mean=%.2f bpm, Std=%.2f bpm, Range=%.2f - %.2f bpm\n', heartRateStats.mean, heartRateStats.std, heartRateStats.min, heartRateStats.max);
         fprintf('Breathing Rate: Mean=%.2f breaths/min, Std=%.2f breaths/min, Range=%.2f - %.2f breaths/min\n',breathingRateStats.mean, breathingRateStats.std, breathingRateStats.min, breathingRateStats.max);
         fprintf('Walking Rate: Mean=%.2f steps/min, Std=%.2f steps/min, Range=%.2f - %.2f steps/min\n\n',walkingRateStats.mean, walkingRateStats.std, walkingRateStats.min, walkingRateStats.max);
-
+        
         set(conclusionLabel_heartbeat, 'String', sprintf(...
             'Heart Rate: Mean=%.2f bpm, Std=%.2f bpm, Range=%.2f - %.2f bpm',...
             heartRateStats.mean, heartRateStats.std, heartRateStats.min, heartRateStats.max));
