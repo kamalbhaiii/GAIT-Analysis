@@ -107,6 +107,10 @@ simulationTime = inf; % Variable to store simulation time
         % Classify activity using the trained SVM model
         currentHR = heartRateData(end);
         currentWR = walkingRateData(end);
+
+        if currentHR > 200 || currentWR > 200
+            uiwait(msgbox('Warning: High physiological rates detected. Please seek medical attention if you feel unwell.', 'Alert', 'warn'));
+        end
         
         pyenv('Version','3.9'); % Set the Python version
         model = py.joblib.load('svm_activity_model.pkl');
